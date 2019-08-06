@@ -41,6 +41,9 @@ namespace WPF3DDemo
                 ContainerUIElement3D container = Visual3DHelper.ClosedPathToContainerUIElement3D(keyPoints, 0, -50);
 
                 container.MouseLeftButtonDown += Container_MouseLeftButtonDown;
+                container.MouseEnter += Container_MouseEnter;
+                container.MouseLeave += Container_MouseLeave;
+
                 viewport3D.Children.Add(container);
             }
 
@@ -58,6 +61,44 @@ namespace WPF3DDemo
             timer.Interval = TimeSpan.FromMilliseconds(3000);
             timer.Tick += Timer_Tick;
             timer.Start();
+        }
+
+        private void Container_MouseLeave(object sender, MouseEventArgs e)
+        {
+            //ContainerUIElement3D container = sender as ContainerUIElement3D;
+
+            //Transform3DGroup transform3DGroup = container.Transform as Transform3DGroup;
+            //TranslateTransform3D translateTransform3D = transform3DGroup.Children[0] as TranslateTransform3D;
+            //ScaleTransform3D scaleTransform3D = transform3DGroup.Children[1] as ScaleTransform3D;
+            //RotateTransform3D rotateTransform3D = transform3DGroup.Children[2] as RotateTransform3D;
+
+            ////位置变换
+            //DoubleAnimation doubleAnimationZ = new DoubleAnimation();
+            //doubleAnimationZ.BeginTime = new TimeSpan(0, 0, 0);
+            //doubleAnimationZ.Duration = TimeSpan.FromMilliseconds(500);
+            //doubleAnimationZ.From = translateTransform3D.OffsetZ;
+            //doubleAnimationZ.To = 0;
+
+            //translateTransform3D.BeginAnimation(TranslateTransform3D.OffsetZProperty, doubleAnimationZ);
+        }
+
+        private void Container_MouseEnter(object sender, MouseEventArgs e)
+        {
+            //ContainerUIElement3D container = sender as ContainerUIElement3D;
+
+            //Transform3DGroup transform3DGroup = container.Transform as Transform3DGroup;
+            //TranslateTransform3D translateTransform3D = transform3DGroup.Children[0] as TranslateTransform3D;
+            //ScaleTransform3D scaleTransform3D = transform3DGroup.Children[1] as ScaleTransform3D;
+            //RotateTransform3D rotateTransform3D = transform3DGroup.Children[2] as RotateTransform3D;
+
+            ////位置变换
+            //DoubleAnimation doubleAnimationZ = new DoubleAnimation();
+            //doubleAnimationZ.BeginTime = new TimeSpan(0, 0, 0);
+            //doubleAnimationZ.Duration = TimeSpan.FromMilliseconds(500);
+            //doubleAnimationZ.From = translateTransform3D.OffsetZ;
+            //doubleAnimationZ.To = -100;
+
+            //translateTransform3D.BeginAnimation(TranslateTransform3D.OffsetZProperty, doubleAnimationZ);
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -95,11 +136,11 @@ namespace WPF3DDemo
             }
             else
             {
-                doubleAnimationZ.To = -100;
+                doubleAnimationZ.To = -45;
             }
             translateTransform3D.BeginAnimation(TranslateTransform3D.OffsetZProperty, doubleAnimationZ);
 
-            //缩放
+            ////缩放
             //DoubleAnimation scaleTransformAnimation = new DoubleAnimation();
             //scaleTransformAnimation.BeginTime = new TimeSpan(0, 0, 0);
             //scaleTransformAnimation.Duration = TimeSpan.FromMilliseconds(500);
@@ -120,7 +161,7 @@ namespace WPF3DDemo
             Color newsurfaceColor;
             if (isClicked)
             {
-                newsurfaceColor = Color.FromArgb(0xff, 0x00, 0xff, 0xff);
+                newsurfaceColor = Color.FromArgb(0x99, 0x00, 0xff, 0xff);
             }
             else
             {

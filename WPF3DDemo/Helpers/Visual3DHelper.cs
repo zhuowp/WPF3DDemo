@@ -48,7 +48,7 @@ namespace WPF3DDemo.Helpers
             visual3DModel.Geometry = CreatePathAreaGeometry3D(pathPoint, zValue, positiveDirection);
 
             MaterialGroup materials = new MaterialGroup();
-            DiffuseMaterial diffuseMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(0xff, 0x00, 0xff, 0xff)));
+            DiffuseMaterial diffuseMaterial = new DiffuseMaterial(new SolidColorBrush(Color.FromArgb(0x99, 0x00, 0xff, 0xff)));
             materials.Children.Add(diffuseMaterial);
             DiffuseMaterial imageMaterial = new DiffuseMaterial(new ImageBrush(new BitmapImage(new Uri(@"guangdong.png", UriKind.RelativeOrAbsolute))));
             materials.Children.Add(imageMaterial);
@@ -103,73 +103,11 @@ namespace WPF3DDemo.Helpers
                         mesh.TriangleIndices.Add(trianglePointIndexList[addIndexArray[k]]);
                     }
                 }
-
-                //foreach (int pointIndex in trianglePointIndexList)
-                //{
-                //    mesh.TriangleIndices.Add(pointIndex);
-                //}
             }
-            //List<Point3DWithIndex> indexPoint3DList = new List<Point3DWithIndex>();
-            //foreach (Point3D point3D in point3DList)
-            //{
-            //    Point3DWithIndex indexPoint3D = new Point3DWithIndex();
-            //    indexPoint3D.Point = point3D;
-
-            //    indexPoint3DList.Add(indexPoint3D);
-            //}
-
-            //while (indexPoint3DList.Count > 3)
-            //{
-            //    int removeCount = 0;
-            //    for (int i = indexPoint3DList.Count - 1; i >= 0; i--)
-            //    {
-            //        int previewPoint3DIndex = (indexPoint3DList.Count + i - 1) % (indexPoint3DList.Count);
-            //        int nextPoint3DIndex = (i + 1) % (indexPoint3DList.Count);
-            //        if (Test(indexPoint3DList[previewPoint3DIndex].Point, indexPoint3DList[i].Point, indexPoint3DList[nextPoint3DIndex].Point))
-            //        {
-            //            AddPoint3DToMesh(mesh, indexPoint3DList[previewPoint3DIndex]);
-            //            AddPoint3DToMesh(mesh, indexPoint3DList[i]);
-            //            AddPoint3DToMesh(mesh, indexPoint3DList[nextPoint3DIndex]);
-
-            //            indexPoint3DList[i].RemoveFlag = true;
-
-            //            if (positiveDirection > 0)
-            //            {
-            //                mesh.TriangleIndices.Add(indexPoint3DList[previewPoint3DIndex].Index);
-            //                mesh.TriangleIndices.Add(indexPoint3DList[i].Index);
-            //                mesh.TriangleIndices.Add(indexPoint3DList[nextPoint3DIndex].Index);
-            //            }
-            //            else
-            //            {
-            //                mesh.TriangleIndices.Add(indexPoint3DList[previewPoint3DIndex].Index);
-            //                mesh.TriangleIndices.Add(indexPoint3DList[nextPoint3DIndex].Index);
-            //                mesh.TriangleIndices.Add(indexPoint3DList[i].Index);
-            //            }
-
-            //            indexPoint3DList.RemoveAt(i);
-            //            removeCount++;
-            //            i--;
-            //        }
-            //    }
-
-            //    if (removeCount == 0)
-            //    {
-            //        break;
-            //    }
-            //}
 
             mesh.Freeze();
             return mesh;
         }
-
-        //private static void AddPoint3DToMesh(MeshGeometry3D mesh, Point3DWithIndex point3DWithIndex)
-        //{
-        //    if (point3DWithIndex.Index < 0)
-        //    {
-        //        point3DWithIndex.Index = mesh.Positions.Count;
-        //        mesh.Positions.Add(point3DWithIndex.Point);
-        //    }
-        //}
 
         private static Geometry3D CreateSurroundingGeometry3D(IList<Point> closedPathPoints, double topZValue, double bottomZValue)
         {
