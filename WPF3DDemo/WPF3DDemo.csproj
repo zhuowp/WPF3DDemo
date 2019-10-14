@@ -36,6 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HelixToolkit, Version=2.8.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.2.8.0\lib\netstandard1.1\HelixToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="HelixToolkit.Wpf, Version=2.8.0.0, Culture=neutral, PublicKeyToken=52aa3500039caf0d, processorArchitecture=MSIL">
+      <HintPath>..\packages\HelixToolkit.Wpf.2.8.0\lib\net45\HelixToolkit.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="MathNet.Numerics, Version=4.8.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.8.1\lib\net40\MathNet.Numerics.dll</HintPath>
     </Reference>
@@ -64,18 +70,45 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Helpers\PolygonTriangulationHelper.cs" />
-    <Compile Include="Helpers\LocationTransformHelper.cs" />
-    <Compile Include="Helpers\TextureMapHelper.cs" />
-    <Compile Include="Models\Map2Ds\Map2DArea.cs" />
-    <Compile Include="Models\Map2Ds\Map2DGeometryInfo.cs" />
-    <Compile Include="Models\Map2Ds\Map2DInfo.cs" />
-    <Compile Include="Models\Map2Ds\Map2DPropertyInfo.cs" />
-    <Compile Include="Models\Vertex2D.cs" />
-    <Compile Include="Wave3D.cs" />
+    <Compile Include="Helpers\Maps\GeoJsonParseHelper.cs" />
+    <Compile Include="Helpers\Maps\Map2DlTo3DModelHelper.cs" />
+    <Compile Include="Helpers\Maps\MapDataConvertHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\FeaturePointHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\GraphicHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\PolygonHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\PolygonTriangulationHelper.cs" />
+    <Compile Include="Helpers\Maps\LocationTransformHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\TextureMapHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\Visual3DCreateHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\Visual3DHelper.cs" />
+    <Compile Include="Models\GeoJsons\GeoJsonFeature.cs" />
+    <Compile Include="Models\GeoJsons\GeoJsonGeometryCoded.cs" />
+    <Compile Include="Models\GeoJsons\GeoJson.cs" />
+    <Compile Include="Models\GeoJsons\GeoJsonFeatureProperty.cs" />
+    <Compile Include="Models\GeoJsons\GeoJsonGeometry.cs" />
+    <Compile Include="Models\GeoJsons\GeoJsonGeometryBase.cs" />
+    <Compile Include="Models\GeoJsons\GeoJsonGeometryStandard.cs" />
+    <Compile Include="Models\GeoJsons\GeoJsonType.cs" />
+    <Compile Include="Models\mapdata.cs" />
+    <Compile Include="Models\Maps\Map2DModel.cs" />
+    <Compile Include="Models\Maps\Map3DModel.cs" />
+    <Compile Include="Models\Visuals\CylinderVisual3DModel.cs" />
+    <Compile Include="Models\Visuals\Material3DModel.cs" />
+    <Compile Include="Models\Visuals\MaterialType.cs" />
+    <Compile Include="Models\Visuals\Vertex2D.cs" />
+    <Compile Include="Controls\Wave3D.cs" />
     <Compile Include="Controls\Map3D.cs" />
-    <Compile Include="Models\Point3DWithIndex.cs" />
-    <Compile Include="Helpers\Visual3DHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\Visual2DTo3DHelper.cs" />
+    <Compile Include="Models\Visuals\Geometry3DModel.cs" />
+    <Compile Include="Views\Map3DView.xaml.cs">
+      <DependentUpon>Map3DView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MapFeatureEditView.xaml.cs">
+      <DependentUpon>MapFeatureEditView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Wave3DView.xaml.cs">
+      <DependentUpon>Wave3DView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -84,7 +117,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\PerspectiveCameraTransformHelper.cs" />
+    <Compile Include="Helpers\Visual3Ds\PerspectiveCameraTransformHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -92,6 +125,18 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Map3DView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MapFeatureEditView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Wave3DView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +167,76 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\Map3Ds\" />
     <Folder Include="ViewModels\" />
-    <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MapTextures\大图1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MapTextures\111.png" />
+    <Content Include="Images\MapTextures\chaozhou.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\dongguan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\foshan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\guangzhou.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\heyuan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\huizhou.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\jiangmen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\jieyang.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\maoming.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\meizhou.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\qingyuan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\shantou.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\shanwei.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\shaoguan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\shenzhen.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\yangjiang.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\yunfu.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\zhanjiang.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\zhaoqing.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\zhongshan.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\MapTextures\zhuhai.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

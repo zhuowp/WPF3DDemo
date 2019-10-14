@@ -5,14 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPF3DDemo.Models.Map2Ds
+namespace WPF3DDemo.Models.GeoJsons
 {
-    public class Map2DInfo
+    public class GeoJson<T> where T : GeoJsonGeometryBase
     {
         [JsonProperty("type")]
         public string Type { get; set; }
 
         [JsonProperty("features")]
-        public List<Map2DArea> MapAreaList { get; set; }
+        public List<GeoJsonFeature<T>> Features { get; set; }
+
+        [JsonProperty("UTF8Encoding")]
+        public bool IsUTF8Encoding { get; set; }
     }
 }

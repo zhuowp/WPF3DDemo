@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WPF3DDemo.Models
 {
@@ -28,6 +29,11 @@ namespace WPF3DDemo.Models
 
         public Vertex2D()
         { }
+
+        public Vertex2D(Point point) : this(point.X, point.Y, false, false, 0)
+        {
+
+        }
 
         public Vertex2D(double x, double y) : this(x, y, false, false, 0)
         {

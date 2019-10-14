@@ -7,7 +7,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Media3D;
 using System.Windows.Shapes;
 
-namespace WPF3DDemo.Helpers
+namespace WPF3DDemo.Helpers.Visual3Ds
 {
     public static class PerspectiveCameraTransformHelper
     {
@@ -39,6 +39,9 @@ namespace WPF3DDemo.Helpers
 
         public static void HorizontalRotateAroundCenter(this PerspectiveCamera camera, double rotateAngle, Point3D center)
         {
+            //旋转中心位置向量
+            Vector3D rotateCenterPosition = new Vector3D(center.X, center.Y, center.Z);
+
             //摄像机位置向量
             Vector3D cameraPosition = new Vector3D(camera.Position.X, camera.Position.Y, camera.Position.Z);
 
@@ -51,8 +54,8 @@ namespace WPF3DDemo.Helpers
 
             //变换摄像机位置
             Matrix3D matrix = rotateTransform3D.Value;
-            Point3D newCameraPosition = matrix.Transform(camera.Position);
-            camera.Position = newCameraPosition;
+            Point3D newCameraPosition = matrix.Transform(camera.Position - rotateCenterPosition);
+            camera.Position = newCameraPosition + rotateCenterPosition;
             camera.LookDirection = new Vector3D(-newCameraPosition.X, -newCameraPosition.Y, -newCameraPosition.Z);
         }
 

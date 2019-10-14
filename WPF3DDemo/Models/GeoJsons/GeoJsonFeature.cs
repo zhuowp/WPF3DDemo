@@ -5,17 +5,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WPF3DDemo.Models.Map2Ds
+namespace WPF3DDemo.Models.GeoJsons
 {
-    public class Map2DArea
+    public class GeoJsonFeature<T> where T : GeoJsonGeometryBase
     {
+        [JsonProperty("id")]
+        public string Id { get; set; }
+
         [JsonProperty("type")]
         public string Type { get; set; }
 
         [JsonProperty("properties")]
-        public Map2DPropertyInfo Properties { get; set; }
+        public GeoJsonFeatureProperty Properties { get; set; }
 
         [JsonProperty("geometry")]
-        public Map2DGeometryInfo Geometry { get; set; }
+        public T Geometry { get; set; }
     }
 }

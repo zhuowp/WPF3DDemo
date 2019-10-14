@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="WPF3DDemo.Views.Map3DView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WPF3DDemo.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="Gray">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Background="Transparent"
+              MouseRightButtonDown="Grid_MouseRightButtonDown" 
+              MouseRightButtonUp="Grid_MouseRightButtonUp"
+              MouseMove="Grid_MouseMove"
+              MouseWheel="Grid_MouseWheel">
+            <Border BorderThickness="1" BorderBrush="Red">
+                <Viewport3D Name="viewport3D">
+                    <!-- The camera -->
+                    <Viewport3D.Camera>
+                        <PerspectiveCamera x:Name="camera"  
+                                                       Position="0,0,-1800" 
+                                                       LookDirection="0,0, 1" 
+                                                       UpDirection="0,-1,0" 
+                                                       FieldOfView="40"/>
+                    </Viewport3D.Camera>
+
+                    <!-- Lights -->
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup>
+                                <Model3DGroup.Children>
+                                    <AmbientLight x:Name="ambientLight"/>
+                                </Model3DGroup.Children>
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
+                </Viewport3D>
+            </Border>
+        </Grid>
+
+        <StackPanel Grid.Column="1" Orientation="Vertical">
+            <Button x:Name="btnSeparate" Content="分散1" Click="BtnSeparate_Click"/>
+            <Button x:Name="btnSeparate2" Content="分散2" Click="BtnSeparate2_Click"/>
+
+            <Button x:Name="btnCombine" Content="聚合1" Click="BtnCombine_Click"/>
+            <Button x:Name="btnExport" Content="导出" Click="BtnExport_Click"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
