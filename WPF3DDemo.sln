@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF3DDemo", "WPF3DDemo\WPF3DDemo.csproj", "{0B1FDF20-2617-48F0-853F-193AA47ED86D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZGeojson", "ZGeojson\ZGeojson.csproj", "{E7BC506F-A80C-48BC-B1C0-D16A35AEB70D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{0B1FDF20-2617-48F0-853F-193AA47ED86D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0B1FDF20-2617-48F0-853F-193AA47ED86D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0B1FDF20-2617-48F0-853F-193AA47ED86D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E7BC506F-A80C-48BC-B1C0-D16A35AEB70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E7BC506F-A80C-48BC-B1C0-D16A35AEB70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E7BC506F-A80C-48BC-B1C0-D16A35AEB70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E7BC506F-A80C-48BC-B1C0-D16A35AEB70D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

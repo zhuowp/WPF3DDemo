@@ -241,24 +241,7 @@ namespace WPF3DDemo.Helpers.Visual3Ds
         public static CylinderVisual3DModel Closed2DAreaToCylinderVisual3DModel(List<Point> featurePoints, double upperZValue, double lowerZValue)
         {
             CylinderVisual3DModel cylinderVisual3D = new CylinderVisual3DModel();
-
-            double minX = 0;
-            double minY = 0;
-            double maxX = 0;
-            double maxY = 0;
-
-            for (int i = 0; i < featurePoints.Count; i++)
-            {
-                minX = minX > featurePoints[i].X ? featurePoints[i].X : minX;
-                minY = minY > featurePoints[i].Y ? featurePoints[i].Y : minY;
-                maxX = maxX < featurePoints[i].X ? featurePoints[i].X : maxX;
-                maxY = maxY < featurePoints[i].Y ? featurePoints[i].Y : maxY;
-            }
-
-            double xLength = maxX - minX;
-            double yLength = maxY - minY;
-
-            Rect rect = new Rect() { X = minX, Y = minY, Width = xLength, Height = yLength };
+            Rect rect = FeaturePointHelper.GetFeaturePointsBoundaryRect(featurePoints);
             List<Vertex2D> vertexList = new List<Vertex2D>();
             for (int i = 0; i < featurePoints.Count; i++)
             {

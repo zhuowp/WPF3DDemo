@@ -50,7 +50,7 @@ namespace WPF3DDemo.Views
             Task.Factory.StartNew(() =>
             {
                 string provinceName = "广东";
-                string cityName = "南沙区";
+                string cityName = "广州海关";
                 string fileName = cityName;
 
                 #region 读取Geojson转Map2D Json
@@ -101,12 +101,19 @@ namespace WPF3DDemo.Views
                 List<Map2DModel> map2DModelList = JsonConvert.DeserializeObject<List<Map2DModel>>(map2DJson);
                 #endregion
 
-                List<List<List<Point>>> pointListss = map2DModelList.Select(p => p.GeometryPointList).ToList();
-                List<double> bound = GraphicHelper.GetRectBound(pointListss);
-                double centerX = (bound[2] - bound[0]) / 2 + bound[0];
-                double centerY = (bound[3] - bound[1]) / 2 + bound[1];
+                List<Point> allFeaturePoints = new List<Point>();
+                foreach (Map2DModel map2D in map2DModelList)
+                {
+                    foreach (List<Point> points in map2D.GeometryPointList)
+                    {
+                        allFeaturePoints.AddRange(points);
+                    }
+                }
+                Rect rect = FeaturePointHelper.GetFeaturePointsBoundaryRect(allFeaturePoints);
+                double centerX = rect.X + rect.Width / 2;
+                double centerY = rect.Y + rect.Height / 2;
 
-                double zoomFactor = 1000 / Math.Max(bound[2] - bound[0], (bound[3] - bound[1]) * 1.78);
+                double zoomFactor = 1000 / Math.Max(rect.Width, rect.Height * 1.78);
                 for (int i = 0; i < map2DModelList.Count; i++)
                 {
                     Map2DModel map2D = map2DModelList[i];

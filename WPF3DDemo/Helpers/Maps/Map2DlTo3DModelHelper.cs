@@ -60,18 +60,18 @@ namespace WPF3DDemo.Helpers
                 }
             }
 
-            //map3D.Materials = new List<List<Material3DModel>>();
-            //for (int i = 0; i < map2D.GeometryPointList.Count; i++)
-            //{
-            //    List<Material3DModel> materialList = new List<Material3DModel>()
-            //    {
-            //         new Material3DModel(){ MaterialType = MaterialType.ColorDiffuse, MaterialData = Color.FromArgb(0x99, 0x00, 0xff, 0xff) },
-            //         new Material3DModel(){ MaterialType = MaterialType.ColorDiffuse, MaterialData = Color.FromArgb(0x99, 0x00, 0xff, 0xff) },
-            //         new Material3DModel(){ MaterialType = MaterialType.ColorDiffuse, MaterialData = Color.FromArgb(0xff, 0x48, 0x3d, 0x88) }
-            //    };
+            map3D.Materials = new List<List<Material3DModel>>();
+            for (int i = 0; i < map2D.GeometryPointList.Count; i++)
+            {
+                List<Material3DModel> materialList = new List<Material3DModel>()
+                {
+                     new Material3DModel(){ MaterialType = MaterialType.ColorDiffuse, MaterialData = Color.FromArgb(0x99, 0x00, 0xff, 0xff) },
+                     new Material3DModel(){ MaterialType = MaterialType.ColorDiffuse, MaterialData = Color.FromArgb(0x99, 0x00, 0xff, 0xff) },
+                     new Material3DModel(){ MaterialType = MaterialType.ColorDiffuse, MaterialData = Color.FromArgb(0xff, 0x48, 0x3d, 0x88) }
+                };
 
-            //    map3D.Materials.Add(materialList);
-            //}
+                map3D.Materials.Add(materialList);
+            }
 
             return map3D;
         }
@@ -106,18 +106,18 @@ namespace WPF3DDemo.Helpers
                 //visual3DList.Add(upperVisual3D);
 
                 MeshGeometry3D lowerGeometry3D = Visual3DCreateHelper.CreateGeometry3D(cylinderVisual3DModel.LowerUndersurface);
-                //Material lowerMaterial = Visual3DCreateHelper.CreateMaterial3D(map3D.Materials[i][1]);
-                //MaterialGroup mg1 = new MaterialGroup();
-                //mg1.Children.Add(lowerMaterial);
+                Material lowerMaterial = Visual3DCreateHelper.CreateMaterial3D(map3D.Materials[i][1]);
+                MaterialGroup mg1 = new MaterialGroup();
+                mg1.Children.Add(lowerMaterial);
                 //mg1.Children.Add(imageMaterial);
-                Viewport2DVisual3D lowerVisual3D = Visual3DCreateHelper.CreateVisual3D(lowerGeometry3D, imageMaterial);
+                Viewport2DVisual3D lowerVisual3D = Visual3DCreateHelper.CreateVisual3D(lowerGeometry3D, mg1);
                 visual3DList.Add(lowerVisual3D);
 
 
-                //MeshGeometry3D sideGeometry3D = Visual3DCreateHelper.CreateGeometry3D(cylinderVisual3DModel.SideSurface);
-                //Material sideMaterial = Visual3DCreateHelper.CreateMaterial3D(map3D.Materials[i][2]);
-                //Viewport2DVisual3D sideVisual3D = Visual3DCreateHelper.CreateVisual3D(sideGeometry3D, sideMaterial);
-                //visual3DList.Add(sideVisual3D);
+                MeshGeometry3D sideGeometry3D = Visual3DCreateHelper.CreateGeometry3D(cylinderVisual3DModel.SideSurface);
+                Material sideMaterial = Visual3DCreateHelper.CreateMaterial3D(map3D.Materials[i][2]);
+                Viewport2DVisual3D sideVisual3D = Visual3DCreateHelper.CreateVisual3D(sideGeometry3D, sideMaterial);
+                visual3DList.Add(sideVisual3D);
             }
             ContainerUIElement3D uIElement3D = Visual3DCreateHelper.CreateUIElement3D(visual3DList);
 
