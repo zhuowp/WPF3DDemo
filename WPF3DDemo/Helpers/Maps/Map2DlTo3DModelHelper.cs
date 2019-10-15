@@ -44,6 +44,11 @@ namespace WPF3DDemo.Helpers
             map3D.Id = map2D.Id;
             map3D.Name = map2D.Name;
 
+            map3D.MinLongitude = map2D.MinLongitude;
+            map3D.MaxLongitude = map2D.MaxLongitude;
+            map3D.MinLatitude = map2D.MinLatitude;
+            map3D.MaxLatitude = map2D.MaxLatitude;
+
             List<CylinderVisual3DModel> cylinderVisual3DModelList = new List<CylinderVisual3DModel>();
             map3D.Geometries = cylinderVisual3DModelList;
 

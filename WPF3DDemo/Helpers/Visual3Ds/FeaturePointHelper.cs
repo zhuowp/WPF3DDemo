@@ -30,5 +30,13 @@ namespace WPF3DDemo.Helpers.Visual3Ds
             Rect rect = new Rect() { X = minX, Y = minY, Width = width, Height = height };
             return rect;
         }
+
+        public static Point GetRectCenter(ref Rect rect)
+        {
+            Point centerPoint = new Point();
+            centerPoint.X = rect.X + rect.Width / 2;
+            centerPoint.Y = rect.Y + rect.Height / 2;
+            return centerPoint;
+        }
     }
 }
