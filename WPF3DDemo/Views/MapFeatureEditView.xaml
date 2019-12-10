@@ -15,7 +15,10 @@
         <Button x:Name="btnSave" Content="保存" Click="BtnSave_Click"/>
         <Button x:Name="btnCapture" Content="存图" Click="CaptureBtn_Click" Grid.Row="1"/>
         <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Grid.Row="2">
-            <Canvas x:Name="canvas" Width="25000" Height="22000"/>
+            <Grid>
+                <Canvas x:Name="canvas" Width="25000" Height="22000" Visibility="Visible"/>
+                <!--<InkCanvas x:Name="inkCanvas" Width="5000" Height="5000"/>-->
+            </Grid>
         </ScrollViewer>
     </Grid>
 </UserControl>

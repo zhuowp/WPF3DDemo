@@ -48,10 +48,15 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Svg, Version=3.0.0.0, Culture=neutral, PublicKeyToken=12a0bac221edeae2, processorArchitecture=MSIL">
+      <HintPath>..\packages\Svg.3.0.49\lib\net35\Svg.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -89,6 +94,7 @@
     <Compile Include="Models\GeoJsons\GeoJsonGeometryBase.cs" />
     <Compile Include="Models\GeoJsons\GeoJsonGeometryStandard.cs" />
     <Compile Include="Models\GeoJsons\GeoJsonType.cs" />
+    <Compile Include="Models\LoadMapDataType.cs" />
     <Compile Include="Models\mapdata.cs" />
     <Compile Include="Models\Maps\Map2DModel.cs" />
     <Compile Include="Models\Maps\Map3DModel.cs" />

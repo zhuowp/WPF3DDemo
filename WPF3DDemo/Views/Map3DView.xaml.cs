@@ -39,6 +39,12 @@ namespace WPF3DDemo.Views
         private double _verticalRotateAngle = 0;
         private Point3D _center = new Point3D();
 
+        private string _loadFilePath = "";
+        List<Map2DModel> _map2DModelList = null;
+        List<Map3DModel> _map3DModelList = null;
+
+        private LoadMapDataType _loadMapDataType = LoadMapDataType.Unknown;
+
         #endregion
 
         #region Constructors
@@ -46,155 +52,6 @@ namespace WPF3DDemo.Views
         public Map3DView()
         {
             InitializeComponent();
-
-            Task.Factory.StartNew(() =>
-            {
-                string provinceName = "广东";
-                string cityName = "广州海关";
-                string fileName = cityName;
-
-                #region 读取Geojson转Map2D Json
-                ////string geoJsonString = File.ReadAllText(string.Format(@"C:\Users\zhuowp\Desktop\GeoJson\china.json", provinceName, cityName));
-
-                //string geoJsonString = File.ReadAllText(string.Format(@"C:\Users\zhuowp\Desktop\GeoJson\{0}\{1}.json", provinceName, cityName));
-                //GeoJson<GeoJsonGeometry> geoJsonModel = GeoJsonParseHelper.DecodeGeoJson(geoJsonString);
-
-                //string geoJsonString1 = File.ReadAllText(string.Format(@"C:\Users\zhuowp\Desktop\GeoJson\{0}\{1}.json", provinceName, "大铲"));
-                //GeoJson<GeoJsonGeometry> geoJsonModel1 = GeoJsonParseHelper.DecodeStandardGeoJson(geoJsonString1);
-                //geoJsonModel1.Features[0].Id = "9999";
-
-                //geoJsonModel.Features.Add(geoJsonModel1.Features[0]);
-                //List<Map2DModel> map2DModelList = MapDataConvertHelper.GeoJsonModelToMap2DList(geoJsonModel);
-
-                //string map2DJson = JsonConvert.SerializeObject(map2DModelList);
-                //File.WriteAllText(string.Format(@"C:\Users\zhuowp\Desktop\haiguan\map data\{0}.m2d", cityName), map2DJson);
-                #endregion
-
-                #region 南沙区 Map2D json
-
-                //string map2DData = File.ReadAllText(@"C:\Users\zhuowp\Desktop\南沙区.txt");
-                //List<List<mapdata>> mapdataList = JsonConvert.DeserializeObject<List<List<mapdata>>>(map2DData);
-                //List<Map2DModel> map2DModelList = new List<Map2DModel>();
-                //List<List<Point>> pointListList = new List<List<Point>>();
-                //foreach (var areaList in mapdataList)
-                //{
-                //    List<Point> pointList = new List<Point>();
-                //    foreach (var lngLat in areaList)
-                //    {
-                //        Point point = new Point() { X = lngLat.lng, Y = lngLat.lat };
-                //        pointList.Add(point);
-                //    }
-
-                //    pointListList.Add(pointList);
-                //}
-
-                //Map2DModel map2DModel = MapDataConvertHelper.LngLatPointListToMap2DModel(pointListList);
-                //map2DModelList.Add(map2DModel);
-
-                //string map2DJson = JsonConvert.SerializeObject(map2DModelList);
-                //File.WriteAllText(string.Format(@"C:\Users\zhuowp\Desktop\haiguan\map data\{0}.m2d", cityName), map2DJson);
-
-                #endregion
-
-                #region 获取已有Map2D json
-
-                List<Map2DModel> map2DModelList = LoadMap2DData(fileName);
-
-                #endregion
-
-                Rect rect = GetMap3DModelsBoundaryRect(map2DModelList);
-
-                double zoomFactor = InflateMap2DShapeInBoundaryRectCenter(map2DModelList, rect);
-
-                List<Map3DModel> map3DModelList = new List<Map3DModel>();
-                for (int i = 0; i < map2DModelList.Count; i++)
-                {
-                    Map3DModel map3D = Map2DTo3DHelper.Map2DTo3DModel(map2DModelList[i], 0, -10);
-                    map3D.ZoomFactor = zoomFactor;
-
-                    map3DModelList.Add(map3D);
-                }
-
-                //SaveMap3DData(fileName, map3DModelList);
-
-                InitMap3DComponents(map3DModelList);
-            });
-        }
-
-        private double InflateMap2DShapeInBoundaryRectCenter(List<Map2DModel> map2DModelList, Rect rect)
-        {
-            Point centerPoint = FeaturePointHelper.GetRectCenter(ref rect);
-
-            double zoomFactor = 1000 / Math.Max(rect.Width, rect.Height * 1.78);
-            for (int i = 0; i < map2DModelList.Count; i++)
-            {
-                Map2DModel map2D = map2DModelList[i];
-                for (int k = map2D.GeometryPointList.Count - 1; k >= 0; k--)
-                {
-                    List<Point> pointList = map2D.GeometryPointList[k];
-                    for (int j = 0; j < pointList.Count; j++)
-                    {
-                        Point point = pointList[j];
-                        point.X = (point.X - centerPoint.X) * zoomFactor;
-                        point.Y = (point.Y - centerPoint.Y) * zoomFactor;
-
-                        pointList[j] = point;
-                    }
-
-                    if (pointList.Count < 3)
-                    {
-                        map2D.GeometryPointList.RemoveAt(k);
-                    }
-                }
-            }
-
-            return zoomFactor;
-        }
-
-        private List<Map2DModel> LoadMap2DData(string fileName)
-        {
-            string map2DJson = File.ReadAllText(string.Format(@"C:\Users\zhuowp\Desktop\haiguan\map data\{0}.m2d", fileName));
-            List<Map2DModel> map2DModelList = JsonConvert.DeserializeObject<List<Map2DModel>>(map2DJson);
-            return map2DModelList;
-        }
-
-        private Rect GetMap3DModelsBoundaryRect(List<Map2DModel> map2DModelList)
-        {
-            List<Point> allFeaturePoints = new List<Point>();
-            foreach (Map2DModel map2D in map2DModelList)
-            {
-                foreach (List<Point> points in map2D.GeometryPointList)
-                {
-                    allFeaturePoints.AddRange(points);
-                }
-            }
-            Rect rect = FeaturePointHelper.GetFeaturePointsBoundaryRect(allFeaturePoints);
-            return rect;
-        }
-
-        private void InitMap3DComponents(List<Map3DModel> map3DModelList)
-        {
-            Dispatcher.Invoke(() =>
-            {
-                List<ContainerUIElement3D> uIElement3Ds = new List<ContainerUIElement3D>();
-                foreach (Map3DModel map3D in map3DModelList)
-                {
-                    ContainerUIElement3D uiElement = Map2DTo3DHelper.Map3DModelToUIElement3D(map3D);
-                    uIElement3Ds.Add(uiElement);
-                }
-
-                foreach (ContainerUIElement3D uiElement in uIElement3Ds)
-                {
-                    uiElement.MouseLeftButtonDown += Container_MouseLeftButtonDown;
-                    viewport3D.Children.Add(uiElement);
-                }
-            });
-        }
-
-        private static void SaveMap3DData(string fileName, List<Map3DModel> map3DModelList)
-        {
-            string map3DsJsonString = JsonConvert.SerializeObject(map3DModelList);
-            File.WriteAllText(string.Format(@"C:\Users\zhuowp\Desktop\haiguan\map data\{0}.m3d", fileName), map3DsJsonString);
         }
 
         #endregion
@@ -448,6 +305,95 @@ namespace WPF3DDemo.Views
 
         #endregion
 
+        private List<Map3DModel> Map2DTo3DData(List<Map2DModel> map2DModelList)
+        {
+            Rect rect = GetMap3DModelsBoundaryRect(map2DModelList);
+
+            double zoomFactor = InflateMap2DShapeInBoundaryRectCenter(map2DModelList, rect);
+
+            List<Map3DModel> map3DModelList = new List<Map3DModel>();
+            for (int i = 0; i < map2DModelList.Count; i++)
+            {
+                Map3DModel map3D = Map2DTo3DHelper.Map2DTo3DModel(map2DModelList[i], 0, -10);
+                map3D.ZoomFactor = zoomFactor;
+
+                map3DModelList.Add(map3D);
+            }
+
+            return map3DModelList;
+        }
+
+        private double InflateMap2DShapeInBoundaryRectCenter(List<Map2DModel> map2DModelList, Rect rect)
+        {
+            Point centerPoint = FeaturePointHelper.GetRectCenter(ref rect);
+
+            double zoomFactor = 1000 / Math.Max(rect.Width, rect.Height * 1.78);
+            for (int i = 0; i < map2DModelList.Count; i++)
+            {
+                Map2DModel map2D = map2DModelList[i];
+                for (int k = map2D.GeometryPointList.Count - 1; k >= 0; k--)
+                {
+                    List<Point> pointList = map2D.GeometryPointList[k];
+                    for (int j = 0; j < pointList.Count; j++)
+                    {
+                        Point point = pointList[j];
+                        point.X = (point.X - centerPoint.X) * zoomFactor;
+                        point.Y = (point.Y - centerPoint.Y) * zoomFactor;
+
+                        pointList[j] = point;
+                    }
+
+                    if (pointList.Count < 3)
+                    {
+                        map2D.GeometryPointList.RemoveAt(k);
+                    }
+                }
+            }
+
+            return zoomFactor;
+        }
+
+        private Rect GetMap3DModelsBoundaryRect(List<Map2DModel> map2DModelList)
+        {
+            List<Point> allFeaturePoints = new List<Point>();
+            foreach (Map2DModel map2D in map2DModelList)
+            {
+                foreach (List<Point> points in map2D.GeometryPointList)
+                {
+                    allFeaturePoints.AddRange(points);
+                }
+            }
+            Rect rect = FeaturePointHelper.GetFeaturePointsBoundaryRect(allFeaturePoints);
+            return rect;
+        }
+
+        private void InitMap3DComponents(List<Map3DModel> map3DModelList)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                for (int i = viewport3D.Children.Count - 1; i >= 0; i--)
+                {
+                    if (viewport3D.Children[i] is ContainerUIElement3D)
+                    {
+                        viewport3D.Children.Remove(viewport3D.Children[i]);
+                    }
+                }
+
+                List<ContainerUIElement3D> uIElement3Ds = new List<ContainerUIElement3D>();
+                foreach (Map3DModel map3D in map3DModelList)
+                {
+                    ContainerUIElement3D uiElement = Map2DTo3DHelper.Map3DModelToUIElement3D(map3D);
+                    uIElement3Ds.Add(uiElement);
+                }
+
+                foreach (ContainerUIElement3D uiElement in uIElement3Ds)
+                {
+                    uiElement.MouseLeftButtonDown += Container_MouseLeftButtonDown;
+                    viewport3D.Children.Add(uiElement);
+                }
+            });
+        }
+
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
             var d = new SaveFileDialog();
@@ -459,6 +405,170 @@ namespace WPF3DDemo.Views
             }
 
             Viewport3DHelper.Export(viewport3D, d.FileName);
+        }
+
+        private void BtnOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            string path = GetSelectedFileFullPath();
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            _loadFilePath = path;
+            ttbSourceFilePath.Text = _loadFilePath;
+        }
+
+        private void BtnLoadMap3D_Click(object sender, RoutedEventArgs e)
+        {
+            if (_loadMapDataType == LoadMapDataType.Unknown)
+            {
+                MessageBox.Show("请选择加载文件的类型");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_loadFilePath))
+            {
+                MessageBox.Show("请选择需要加载的文件");
+                return;
+            }
+
+            string fileStr = File.ReadAllText(_loadFilePath);
+            if (string.IsNullOrEmpty(fileStr))
+            {
+                MessageBox.Show("文件数据为空");
+                return;
+            }
+
+            GeoJson<GeoJsonGeometry> geoJsonModel = null;
+
+            switch (_loadMapDataType)
+            {
+                case LoadMapDataType.GeoJson:
+                    geoJsonModel = GeoJsonParseHelper.DecodeStandardGeoJson(fileStr);
+                    _map2DModelList = MapDataConvertHelper.GeoJsonModelToMap2DList(geoJsonModel);
+                    _map3DModelList = Map2DTo3DData(_map2DModelList);
+                    break;
+                case LoadMapDataType.EncodedGeoJson:
+                    geoJsonModel = GeoJsonParseHelper.DecodeGeoJson(fileStr);
+                    _map2DModelList = MapDataConvertHelper.GeoJsonModelToMap2DList(geoJsonModel);
+                    _map3DModelList = Map2DTo3DData(_map2DModelList);
+                    break;
+                case LoadMapDataType.Txt:
+                    _map2DModelList = ParseMap2DDataFromLatLngString(fileStr);
+                    _map3DModelList = Map2DTo3DData(_map2DModelList);
+                    break;
+                case LoadMapDataType.Map2D:
+                    _map2DModelList = JsonConvert.DeserializeObject<List<Map2DModel>>(fileStr);
+                    _map3DModelList = Map2DTo3DData(_map2DModelList);
+                    break;
+                case LoadMapDataType.Map3D:
+                    _map3DModelList = JsonConvert.DeserializeObject<List<Map3DModel>>(fileStr);
+                    break;
+                default:
+                    break;
+            }
+
+            InitMap3DComponents(_map3DModelList);
+        }
+
+        private void LoadTypeRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton radioButton = sender as RadioButton;
+            if (radioButton == null || string.IsNullOrEmpty(radioButton.Tag.ToString()))
+            {
+                return;
+            }
+
+            _loadMapDataType = (LoadMapDataType)int.Parse(radioButton.Tag.ToString());
+        }
+
+        public string GetSelectedFileFullPath()
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog()
+            {
+                Filter = "All files |*.*|Text |*.txt|Json |*.json"
+            };
+
+            var result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                return openFileDialog.FileName;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        private List<Map2DModel> ParseMap2DDataFromLatLngString(string latLngStr)
+        {
+            List<Map2DModel> map2DModelList = new List<Map2DModel>();
+            List<List<Point>> pointListList = new List<List<Point>>();
+
+            string[] featurePointStrings = latLngStr.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            if (featurePointStrings != null)
+            {
+                List<Point> pointList = new List<Point>();
+                pointListList.Add(pointList);
+                foreach (string lngLatStr in featurePointStrings)
+                {
+                    string[] lngLatStrArray = lngLatStr.Split(new string[] { ",", "，" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (lngLatStrArray == null || lngLatStrArray.Length != 2)
+                    {
+                        continue;
+                    }
+                    Point point = new Point() { X = double.Parse(lngLatStrArray[0]), Y = double.Parse(lngLatStrArray[1]) };
+                    pointList.Add(point);
+                }
+            }
+
+            Map2DModel map2DModel = MapDataConvertHelper.LngLatPointListToMap2DModel(pointListList);
+            map2DModelList.Add(map2DModel);
+
+            return map2DModelList;
+        }
+
+        private void btnSaveMap2D_Click(object sender, RoutedEventArgs e)
+        {
+            if (_map2DModelList == null)
+            {
+                MessageBox.Show("地图数据为空，无法保存");
+                return;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Map2D文件|*.m2d";
+
+            if (sfd.ShowDialog() == true)
+            {
+                string fileName = sfd.FileName;
+
+                string map2DsJsonString = JsonConvert.SerializeObject(_map2DModelList);
+                File.WriteAllText(fileName, map2DsJsonString);
+                MessageBox.Show("保存成功");
+            }
+        }
+
+        private void btnSaveMap3D_Click(object sender, RoutedEventArgs e)
+        {
+            if (_map3DModelList == null)
+            {
+                MessageBox.Show("地图数据为空，无法保存");
+                return;
+            }
+
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "Map3D文件|*.m3d";
+
+            if (sfd.ShowDialog() == true)
+            {
+                string fileName = sfd.FileName;
+
+                string map3DsJsonString = JsonConvert.SerializeObject(_map3DModelList);
+                File.WriteAllText(fileName, map3DsJsonString);
+                MessageBox.Show("保存成功");
+            }
         }
     }
 }

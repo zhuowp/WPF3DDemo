@@ -8,16 +8,61 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="Gray">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Background="Transparent"
+        <Grid Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="文件：" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                <TextBox x:Name="ttbSourceFilePath" Width="180" ToolTip="{Binding Text,ElementName=ttbSourceFilePath}" IsEnabled="False"/>
+                <Button x:Name="btnOpenFile" Content="选择" Click="BtnOpenFile_Click"/>
+            </StackPanel>
+
+            <TextBlock Text="载入方式：" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            <WrapPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <RadioButton Content="GeoJson" Tag="1" Checked="LoadTypeRadioButton_Checked"/>
+                <RadioButton Content="压缩GeoJson" Tag="2" Checked="LoadTypeRadioButton_Checked"/>
+                <RadioButton Content="TXT" Tag="3" Checked="LoadTypeRadioButton_Checked"/>
+                <RadioButton Content="Map2D" Tag="4" Checked="LoadTypeRadioButton_Checked"/>
+                <RadioButton Content="Map3D" Tag="5" Checked="LoadTypeRadioButton_Checked"/>
+            </WrapPanel>
+
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Vertical">
+                <Button x:Name="btnLoadMap3D" Content="加载3D地图模型" Click="BtnLoadMap3D_Click" HorizontalAlignment="Right"/>
+                <Button x:Name="btnSaveMap2D" Content="保存2D模型" HorizontalAlignment="Right" Click="btnSaveMap2D_Click"/>
+                <Button x:Name="btnSaveMap3D" Content="保存3D模型" HorizontalAlignment="Right" Click="btnSaveMap3D_Click"/>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Column="0" Orientation="Vertical" Visibility="Collapsed">
+            <Button x:Name="btnSeparate" Content="分散1" Click="BtnSeparate_Click"/>
+            <Button x:Name="btnSeparate2" Content="分散2" Click="BtnSeparate2_Click"/>
+
+            <Button x:Name="btnCombine" Content="聚合1" Click="BtnCombine_Click"/>
+            <Button x:Name="btnExport" Content="导出" Click="BtnExport_Click"/>
+        </StackPanel>
+
+        <Grid Grid.Column="1" Background="Transparent"
               MouseRightButtonDown="Grid_MouseRightButtonDown" 
               MouseRightButtonUp="Grid_MouseRightButtonUp"
               MouseMove="Grid_MouseMove"
               MouseWheel="Grid_MouseWheel">
-            <Border BorderThickness="1" BorderBrush="Red">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="49*"/>
+                <RowDefinition Height="41*"/>
+            </Grid.RowDefinitions>
+            <Border BorderThickness="1" BorderBrush="Red" Grid.RowSpan="2">
                 <Viewport3D Name="viewport3D">
                     <!-- The camera -->
                     <Viewport3D.Camera>
@@ -41,13 +86,5 @@
                 </Viewport3D>
             </Border>
         </Grid>
-
-        <StackPanel Grid.Column="1" Orientation="Vertical">
-            <Button x:Name="btnSeparate" Content="分散1" Click="BtnSeparate_Click"/>
-            <Button x:Name="btnSeparate2" Content="分散2" Click="BtnSeparate2_Click"/>
-
-            <Button x:Name="btnCombine" Content="聚合1" Click="BtnCombine_Click"/>
-            <Button x:Name="btnExport" Content="导出" Click="BtnExport_Click"/>
-        </StackPanel>
     </Grid>
 </UserControl>
